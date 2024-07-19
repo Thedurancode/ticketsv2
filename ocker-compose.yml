@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: php_app
+    volumes:
+      - ./src:/var/www/html
+    networks:
+      - app-network
+    depends_on:
+      - nginx
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    ports:
+      - "8081:80"  # Change to 8081 to avoid conflicts
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./src:/var/www/html
+    networks:
+      - app-network
+
+  composer:
+    image: composer:latest
+    container_name: composer
+    volumes:
+      - ./src:/app
+    networks:
+      - app-network
+    entrypoint: ["composer"]
+
+networks:
+  app-network:
+    driver: bridge
