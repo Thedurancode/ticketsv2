@@ -3,34 +3,142 @@ version: '3.8'
 services:
   web:
     build: .
-    container_name: php_app
+    container_name: web-b8gw4gk-030104020012
     volumes:
-      - ./src:/var/www/html
+      - '/data/coolify/applications/b8gw4gk/src:/var/www/html'
     networks:
-      - app-network
+      app-network: null
+      b8gw4gk: null
     depends_on:
       - nginx
-
+      - mailhog
+    labels:
+      - traefik.enable=true
+      - traefik.http.middlewares.gzip.compress=true
+      - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
+      - traefik.http.routers.http-0-t0os8oo.entryPoints=http
+      - traefik.http.routers.http-0-t0os8oo.middlewares=redirect-to-https
+      - 'traefik.http.routers.http-0-t0os8oo.rule=Host(`g8g88ks.smokesms.com`) && PathPrefix(`/`)'
+      - traefik.http.routers.https-0-t0os8oo.entryPoints=https
+      - traefik.http.routers.https-0-t0os8oo.middlewares=gzip
+      - 'traefik.http.routers.https-0-t0os8oo.rule=Host(`g8g88ks.smokesms.com`) && PathPrefix(`/`)'
+      - traefik.http.routers.https-0-t0os8oo.tls.certresolver=letsencrypt
+      - traefik.http.routers.https-0-t0os8oo.tls=true
+      - 'caddy_0.encode=zstd gzip'
+      - 'caddy_0.handle_path.0_reverse_proxy={{upstreams}}'
+      - 'caddy_0.handle_path=/*'
+      - caddy_0.header=-Server
+      - 'caddy_0.try_files={path} /index.html /index.php'
+      - 'caddy_0=https://g8g88ks.smokesms.com'
+      - caddy_ingress_network=b8gw4gk
+      - coolify.managed=true
+      - coolify.version=4.0.0-beta.315
+      - coolify.applicationId=14
+      - coolify.type=application
+      - coolify.name=web-b8gw4gk-030104020012
+      - coolify.pullRequestId=0
+    restart: unless-stopped
+  
   nginx:
-    image: nginx:alpine
-    container_name: nginx
+    image: 'nginx:alpine'
+    container_name: nginx-b8gw4gk-030104024500
     ports:
-      - "8081:80"  # Change to 8081 to avoid conflicts
+      - '8082:80'  # Change to 8082 to avoid conflicts
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./src:/var/www/html
+      - '/data/coolify/applications/b8gw4gk/nginx.conf:/etc/nginx/nginx.conf:ro'
+      - '/data/coolify/applications/b8gw4gk/src:/var/www/html'
     networks:
-      - app-network
+      app-network: null
+      b8gw4gk: null
+    labels:
+      - traefik.enable=true
+      - traefik.http.middlewares.gzip.compress=true
+      - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
+      - traefik.http.routers.http-0-a4s8wg8.entryPoints=http
+      - traefik.http.routers.http-0-a4s8wg8.middlewares=redirect-to-https
+      - 'traefik.http.routers.http-0-a4s8wg8.rule=Host(`hskk080.smokesms.com`) && PathPrefix(`/`)'
+      - traefik.http.routers.https-0-a4s8wg8.entryPoints=https
+      - traefik.http.routers.https-0-a4s8wg8.middlewares=gzip
+      - 'traefik.http.routers.https-0-a4s8wg8.rule=Host(`hskk080.smokesms.com`) && PathPrefix(`/`)'
+      - traefik.http.routers.https-0-a4s8wg8.tls.certresolver=letsencrypt
+      - traefik.http.routers.https-0-a4s8wg8.tls=true
+      - 'caddy_0.encode=zstd gzip'
+      - 'caddy_0.handle_path.0_reverse_proxy={{upstreams}}'
+      - 'caddy_0.handle_path=/*'
+      - caddy_0.header=-Server
+      - 'caddy_0.try_files={path} /index.html /index.php'
+      - 'caddy_0=https://hskk080.smokesms.com'
+      - caddy_ingress_network=b8gw4gk
+      - coolify.managed=true
+      - coolify.version=4.0.0-beta.315
+      - coolify.applicationId=14
+      - coolify.type=application
+      - coolify.name=nginx-b8gw4gk-030104024500
+      - coolify.pullRequestId=0
+    restart: unless-stopped
 
   composer:
-    image: composer:latest
-    container_name: composer
+    image: 'composer:latest'
+    container_name: composer-b8gw4gk-030104027303
     volumes:
-      - ./src:/app
+      - '/data/coolify/applications/b8gw4gk/src:/app'
     networks:
-      - app-network
-    entrypoint: ["composer"]
+      app-network: null
+      b8gw4gk: null
+    entrypoint:
+      - composer
+    labels:
+      - traefik.enable=true
+      - traefik.http.middlewares.gzip.compress=true
+      - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
+      - traefik.http.routers.http-0-h0ssw40.entryPoints=http
+      - traefik.http.routers.http-0-h0ssw40.middlewares=redirect-to-https
+      - 'traefik.http.routers.http-0-h0ssw40.rule=Host(`z4s8sgo.smokesms.com`) && PathPrefix(`/`)'
+      - traefik.http.routers.https-0-h0ssw40.entryPoints=https
+      - traefik.http.routers.https-0-h0ssw40.middlewares=gzip
+      - 'traefik.http.routers.https-0-h0ssw40.rule=Host(`z4s8sgo.smokesms.com`) && PathPrefix(`/`)'
+      - traefik.http.routers.https-0-h0ssw40.tls.certresolver=letsencrypt
+      - traefik.http.routers.https-0-h0ssw40.tls=true
+      - 'caddy_0.encode=zstd gzip'
+      - 'caddy_0.handle_path.0_reverse_proxy={{upstreams}}'
+      - 'caddy_0.handle_path=/*'
+      - caddy_0.header=-Server
+      - 'caddy_0.try_files={path} /index.html /index.php'
+      - 'caddy_0=https://z4s8sgo.smokesms.com'
+      - caddy_ingress_network=b8gw4gk
+      - coolify.managed=true
+      - coolify.version=4.0.0-beta.315
+      - coolify.applicationId=14
+      - coolify.type=application
+      - coolify.name=composer-b8gw4gk-030104027303
+      - coolify.pullRequestId=0
+    restart: unless-stopped
+
+  mailhog:
+    image: mailhog/mailhog
+    container_name: mailhog-b8gw4gk-030104030000
+    ports:
+      - "1025:1025"   # SMTP server port
+      - "8025:8025"   # Web UI port
+    networks:
+      app-network: null
+      b8gw4gk: null
+    labels:
+      - coolify.managed=true
+      - coolify.version=4.0.0-beta.315
+      - coolify.applicationId=14
+      - coolify.type=application
+      - coolify.name=mailhog-b8gw4gk-030104030000
+      - coolify.pullRequestId=0
+    restart: unless-stopped
+
+volumes: {  }
 
 networks:
-  app-network:
-    driver: bridge
+  app-network: null
+  b8gw4gk:
+    name: b8gw4gk
+    external: true
+
+configs: {  }
+secrets: {  }
